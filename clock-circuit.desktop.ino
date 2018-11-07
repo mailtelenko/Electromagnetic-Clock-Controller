@@ -1,6 +1,7 @@
 /*
    Liam Telenko
    Nov/06/2018
+   https://github.com/mailtelenko/Electromagnetic-Clock-Controller
    This software is to be used in conjunction with an electromagnetically powered clock.
    The program will repel the magnet on the pendulum of the clock whenever it passes over
    the magnetic coil connected to the Arduino.
@@ -17,6 +18,7 @@ int coilPin = A5;
 long currentTime = 0; // Global time 
 long periodStart = 0; // Start of the period 
 long nextPulse = 0; // The time at which the next pulse shoudld start
+long pulseLength = 0; // The duration of the pulse to be applied to the pendulum
 
 void setup() {
   Serial.begin(9600); //Open serial connection
@@ -56,9 +58,14 @@ void calculateTiming() {
    calculateTiming.
    ------------------------------------------------------------------
    nextPulse --> long --> The time at which the coil should fire
+   pulseDuration --> long --> The amount of time the coil should be on for
 */
 void pulseCoil() {
-
+  // Check if the current time is when the pulse should be fired
+  // and if the time is within the length it sould be fired for.
+  if(millis() >= nextPulse && millis() <= nextPulse + pulseDuration)
+    // Turn magnetic coil on
+  // Turn off coil
 }
 
 /*
@@ -71,9 +78,5 @@ void loop() {
   if (checkMagnet() && nextPulse < millis())
     calculateTiming();
 
-  pulseCoil();
-
-  //Serial.println(checkMagnet()); // Check if a magnet can be detected
-  Serial.println(analogRead(coilPin));
-
+  pulseCoil(); // Run pulseCoil to check if coil should be on
 }
