@@ -1,6 +1,6 @@
 /*
    Liam Telenko
-   Nov/06/2018
+   Nov/08/2018
    https://github.com/mailtelenko/Electromagnetic-Clock-Controller
    This software is to be used in conjunction with an electromagnetically powered clock.
    The program will repel the magnet on the pendulum of the clock whenever it passes over
@@ -17,9 +17,12 @@ int coilPin = A5;
 // Timing variables
 long currentTime = 0; // Global time 
 long periodStart = 0; // Start of the period 
-long nextPulse = 0; // The time at which the next pulse shoudld start
-long pulseLength = 0; // The duration of the pulse to be applied to the pendulum
+long nextPulse = 0; // The time at which the next pulse shoudld start --> Modified by calculateTiming
+long pulseLength = 0; // The duration of the pulse to be applied to the pendulum --> Modified by calculateTiming
 
+/*
+ * setup method to initialize variables and pins.
+ */
 void setup() {
   Serial.begin(9600); //Open serial connection
 
@@ -76,7 +79,7 @@ void loop() {
 
   // if checkMagnet() is true --> calculate when to pulse magnet + strength based on time of swing
   if (checkMagnet() && nextPulse < millis())
-    calculateTiming();
+    calculateTiming(); // Calculate next time to pulse coil
 
   pulseCoil(); // Run pulseCoil to check if coil should be on
 }
