@@ -21,7 +21,7 @@ The circuit diagram can be found below the components list.
 10. Basic components & tools (wires/solder + iron/etc)
 
 ### Circuit
-![alt text](https://github.com/mailtelenko/Electromagnetic-Clock-Controller/clock-circuit.png "Clock circuit")
+![alt text](https://github.com/mailtelenko/Electromagnetic-Clock-Controller/blob/master/clock-circuit.png?raw=true "Clock circuit")
 
 ## Setup
 The potentiometers and buttons can be used to adjust the timing and power of the electomagnet. Although not neccessary for operation, using the potentiometer and buttons makes adjusting the clock easier compared to editing the code directly.
