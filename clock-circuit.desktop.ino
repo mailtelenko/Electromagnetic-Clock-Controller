@@ -21,6 +21,7 @@ int slowerButton = 6;
 int coilPWMPin = 5;
 int coilSwitch1 = 3;
 int coilSwitch2 = 4;
+int coilReadPin = A2;
 
 // Coil controls
 int coilPower = 0;
@@ -30,7 +31,7 @@ long currentTime = 0; // Global time
 long periodStart = 0; // Start of the period
 long nextPulse = 0; // The time at which the next pulse shoudld start --> Modified by calculateTiming
 long pulseLength = 500; // The duration of the pulse to be applied to the pendulum --> Modified by calculateTiming
-long pulseSpeed = 1000; // The length of the period of pulses
+long pulseSpeed = 500; // The length of the period of pulses
 
 /*
    setup method to initialize variables and pins. Runs once
@@ -44,10 +45,13 @@ void setup() {
   pinMode(coilPWMPin, OUTPUT);
   pinMode(coilSwitch1, OUTPUT);
   pinMode(coilSwitch2, OUTPUT);
+  pinMode(coilReadPin, INPUT);
 
   // Turn on coil
   digitalWrite(coilSwitch1, LOW);
   digitalWrite(coilSwitch2, HIGH);
+
+  analogReference(INTERNAL);
 }
 /*
    checkMagnet checks for a magnetic field from the copper coil
@@ -115,7 +119,9 @@ void modifyTiming() {
   Serial.print(" | Power: ");
   Serial.print(coilPower);
   Serial.print(" | Period: ");
-  Serial.println(pulseSpeed);
+  Serial.print(pulseSpeed);
+  Serial.print(" | Reading: ");
+  Serial.println(analogRead(coilReadPin));
 }
 
 /*
