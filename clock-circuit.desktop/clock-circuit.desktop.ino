@@ -31,7 +31,7 @@ long currentTime = 0; // Global time
 long periodStart = 0; // Start of the period
 long nextPulse = 0; // The time at which the next pulse shoudld start --> Modified by calculateTiming
 long pulseLength = 500; // The duration of the pulse to be applied to the pendulum --> Modified by calculateTiming
-long pulseSpeed = 1000; // The length of the period of pulses
+long pulseSpeed = 500; // The length of the period of pulses
 
 // Control Variables
 long coilThreshold = 1;
@@ -62,23 +62,31 @@ void checkMagnet() {
   digitalWrite(coilSwitch2, LOW);
 
   for (int x = 0; x < 3; x++) {
+    // Check if there is no magnet over coil (false positive)
     if (analogRead(coilReadPin) == 0)
-      return;
+      return; // Exit out of function
   }
-  
-  forcePulseCoil();
+  Serial.print("Period Length: ");
+  Serial.println(millis() - periodStart);
+
+  calculateTiming(millis() - periodStart);
+
+  periodStart = millis();
+  forcePulseCoil(67);
 }
 
-void forcePulseCoil() {
+void forcePulseCoil(long delayPulse) {
   // Turn on coil
   digitalWrite(coilSwitch1, LOW);
   digitalWrite(coilSwitch2, HIGH);
 
+  delay(delayPulse);
+
   digitalWrite(ledPin, HIGH); // Turn on LED
   analogWrite(coilPWMPin, coilPower); // Turn on power to coil
-  
-  delay(1000);
-  
+
+  delay(pulseLength);
+
   digitalWrite(ledPin, LOW);// Turn off LED
   analogWrite(coilPWMPin, 0); // Shut off power to coil
 }
@@ -90,13 +98,21 @@ void forcePulseCoil() {
    time.
    ---------------------------------------------------------------
 */
-void calculateTiming() {
+void calculateTiming(long periodLength) {
   /*
       If the pendulum is not correctly timed (millis() - periodStart)
       then set the next pulse accordingly (period too long --> later, short --> sooner)
   */
-  if (periodStart + pulseLength < currentTime)
+
+  if (periodLength < 500)
+    Serial.println("Slower!");
+  else if (periodLength > 500)
+    Serial.println("Faster!");
+
+  /*
+    if (periodStart + pulseLength < currentTime)
     nextPulse = currentTime + (pulseSpeed - pulseLength);
+  */
 }
 
 /*
@@ -121,7 +137,6 @@ void pulseCoil() {
     digitalWrite(ledPin, LOW);// Turn off LED
     analogWrite(coilPWMPin, 0); // Shut off power to coil
   }
-
 }
 
 /*
@@ -154,8 +169,8 @@ void loop() {
   currentTime = millis(); // Set current time to the amount of time since board turned on
 
   // if checkMagnet() is true --> calculate when to pulse magnet + strength based on time of swing
-  if (nextPulse + pulseLength < millis())
-    calculateTiming(); // Calculate next time to pulse coil
+  //if (nextPulse + pulseLength < millis())
+    //calculateTiming(); // Calculate next time to pulse coil
 
   if (currentTime % 200 == 0)
     modifyTiming(); // Check potentiometer to adjust timing of pendulum
