@@ -37,7 +37,7 @@ int coilPower = 0; // The value to be applied to the coil PWM pin
 // Timing variables
 long currentTime = 0; // Global time
 long periodStart = 0; // Start of the period
-long nextPulse = 0; // The time at which the next pulse shoudld start --> Modified by calculateTiming
+long nextPulse = 2000; // The time at which the next pulse shoudld start --> Modified by calculateTiming
 
 /*
    setup method to initialize variables and pins. Runs once
@@ -65,9 +65,9 @@ void checkMagnet() {
   digitalWrite(coilSwitch2, LOW);
 
   // Check coil values 3 times
-  for (int x = 0; x < 3; x++) {
+  for (int x = 0; x < 10; x++) {
     // Check if there is no magnet over coil (false positive)
-    if (analogRead(coilReadPin) == 0)
+    if (analogRead(coilReadPin) <= coilThreshold)
       return; // Exit out of function
   }
 
@@ -93,19 +93,20 @@ void checkMagnet() {
    pulseDuration --> long --> The amount of time the coil should be on for
 */
 void pulseCoil() {
-  // If the current time is within the threshold of activation
-  if (currentTime >= nextPulse && currentTime <= (nextPulse + pulseLength)) {
-    // Turn on coil switches
-    digitalWrite(coilSwitch1, LOW);
-    digitalWrite(coilSwitch2, HIGH);
+  delay(pulseDelay);
 
-    // Set coil power + LED
-    digitalWrite(ledPin, HIGH); // Turn on LED
-    analogWrite(coilPWMPin, coilPower); // Turn on power to coil
-  } else {
-    digitalWrite(ledPin, LOW);// Turn off LED
-    analogWrite(coilPWMPin, 0); // Shut off power to coil
-  }
+  // Turn on coil switches
+  digitalWrite(coilSwitch1, LOW);
+  digitalWrite(coilSwitch2, HIGH);
+
+  // Set coil power + LED
+  digitalWrite(ledPin, HIGH); // Turn on LED
+  analogWrite(coilPWMPin, coilPower); // Turn on power to coil
+
+  delay(pulseLength);
+
+  digitalWrite(ledPin, LOW);// Turn off LED
+  analogWrite(coilPWMPin, 0); // Shut off power to coil
 }
 
 /*
@@ -118,7 +119,7 @@ void pulseCoil() {
 void calculateTiming(long periodLength) {
   /*
       If the pendulum is not correctly timed (millis() - periodStart)
-      then set the next pulse accordingly (period too long --> later, 
+      then set the next pulse accordingly (period too long --> later,
       short --> sooner)
   */
   if (periodLength < 500)
@@ -164,7 +165,7 @@ void loop() {
   // Run function every 200ms
   if (currentTime % 200 == 0)
     modifyTiming(); // Check potentiometer to adjust timing of pendulum
-  
+
   checkMagnet(); // Check if there is a magnet passing over the coil
-  pulseCoil(); // Check if coil should be pulsed
+  //pulseCoil(); // Check if coil should be pulsed
 }
