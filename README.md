@@ -26,5 +26,9 @@ The circuit diagram can be found below the components list.
 ## Setup
 The potentiometers and buttons can be used to adjust the timing and power of the electomagnet. Although not neccessary for operation, using the potentiometer and buttons makes adjusting the clock easier compared to editing the code directly.
 
-Once setup, the values can be set in the global variables section to ensure they stay constant during operation.
+Once setup, the values can be set in the ```Control Variables``` section at the top of the program to ensure they stay constant during operation.
 
+## Acknowledgements
+The following software made the arduino based electromagnetic clock circuit possible:
+
+- Arduino Shield schematic and footprint library for KiCad: https://github.com/Alarm-Siren/arduino-kicad-library
