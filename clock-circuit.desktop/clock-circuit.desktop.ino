@@ -72,8 +72,8 @@ void checkMagnet() {
   }
 
   //Display period length on serial monitor for testing
-  Serial.print("Period Length: ");
-  Serial.println(millis() - periodStart);
+  //Serial.print("Period Length: ");
+  //Serial.println(millis() - periodStart);
 
   // Calculate pulse timing using period length
   calculateTiming(millis() - periodStart);
@@ -122,10 +122,10 @@ void calculateTiming(long periodLength) {
       then set the next pulse accordingly (period too long --> later,
       short --> sooner)
   */
-  if (periodLength < 500)
-    Serial.println("Slower!");
-  else if (periodLength > 500)
-    Serial.println("Faster!");
+  //if (periodLength < 500)
+  //  Serial.println("Slower!");
+  //else if (periodLength > 500)
+  //  Serial.println("Faster!");
 
   nextPulse = millis() + pulseDelay; // Set next pulse time
 }
@@ -145,15 +145,15 @@ void modifyTiming() {
   else if (digitalRead(adjustmentButton_faster) == HIGH)
     pulseDelay -= 1; // Decrease length of delay
 
-  // Print values to serial monitor
-  Serial.print("Pulse Length: ");
-  Serial.print(pulseLength);
-  Serial.print(" | Power: ");
-  Serial.print(coilPower);
-  Serial.print(" | Pulse Delay: ");
-  Serial.print(pulseDelay);
-  Serial.print(" | Reading: ");
-  Serial.println(analogRead(coilReadPin));
+  // Print values to serial monitor for tuning
+  //Serial.print("Pulse Length: ");
+  //Serial.print(pulseLength);
+  //Serial.print(" | Power: ");
+  //Serial.print(coilPower);
+  //Serial.print(" | Pulse Delay: ");
+  //Serial.print(pulseDelay);
+  //Serial.print(" | Reading: ");
+  //Serial.println(analogRead(coilReadPin));
 }
 
 /*
